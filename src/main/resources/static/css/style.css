@@ -1,0 +1,49 @@
+/** runchana:2023-10-10
+** Table of contents
+    1. body: update font family and add a background
+    2. background-with-opacity class: gradient background border
+    3. h1: customize font size
+    4. a: remove text decoration for href and customize the color
+    5. a:hover: change the color when hovering
+    6. measureButton: change color to blue
+*/
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.background-image {
+    background-image: url('https://img2.pic.in.th/pic/milad-fakurian-seA-FPPXL-M-unsplash.jpeg');
+    background-size: cover;
+    background-repeat: repeat;
+    height: 100vh;
+}
+
+.background-with-opacity {
+    background-color: rgba(243, 242, 255, 0.5);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+h1 {
+    font-weight: bolder;
+}
+
+h3 {
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color:white;
+}
+
+a:hover {
+    color: grey;
+}
+
+#measureButton {
+    background-color: #4AA5FF;
+    color: #ffffff;
+}
