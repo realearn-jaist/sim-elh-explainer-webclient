@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Similarity ELH Explainer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="background-image">
+<div class="container mt-5 py-3">
+    <a href="/"><h1 class="text-center py-3 px-3">Similarity ELH Explainer</h1></a>
+    <div class="row justify-content-center background-with-opacity">
+        <!-- runchana:2023-10-12 Upload an .owl or .krss file, only one file at a time-->
+        <form action="/" method="POST" enctype="multipart/form-data" name="formFile">
+            <div class="mb-3 input-group py-3 px-5">
+                <input class="form-control" type="file" id="formFile" name="formFile" accept=".owl, .krss" required>
+                <button class="btn btn-primary" type="submit" onclick="checkFileSize()">Upload File</button>
+            </div>
+        </form>
+        <!-- runchana:2023-10-12 Instruction  -->
+        <div th:if="${conceptList == null}" class="text-center">
+            <p>Upload an .owl file or .krss file that you would like to compute a similarity degree.</p>
+        </div>
+        <!-- runchana:2023-10-12 Display list of concept names from an uploaded file and allow users to input preference profile manually with similarity measurement option -->
+        <div th:if="${conceptList != null and not #strings.isEmpty(conceptList.toString())}" class="col-md-9">
+            <div class="row">
+                <!-- runchana:2023-10-12 Display an uploaded file name -->
+                <h3 th:text="${fileName}"></h3>
+                <div class="col-md-7">
+                    <div class="form-floating mb-3">
+                            <textarea class="form-control" id="conceptnamelist" name="conceptnamelist"
+                                      style="height: 500px" disabled th:text="${conceptList}"></textarea>
+                        <label for="conceptnamelist">Concept Name List</label>
+                    </div>
+                </div>
+                <!-- runchana:2023-10-15 Display list of properties -->
+                <div class="col-md-5" th:if="${!propertyList.isEmpty()}">
+                    <div class="form-floating mb-3">
+                            <textarea class="form-control" id="propertylist" name="propertylist" style="height: 500px"
+                                      disabled th:text="${propertyList}"></textarea>
+                        <label for="propertylist">Property List</label>
+                    </div>
+                </div>
+                <!-- runchana:2023-10-12 Display preference profile form to let users insert it manually. -->
+                <div th:class="${columnSize}">
+                    <form action="/simMeasurement" method="POST" name="formSimMeasurement">
+                        <div class="form-floating mb-3">
+                                <textarea class="form-control" id="profile" name="profile"
+                                          title="Preference profile to manually specify a value of each pair of concept names"
+                                          style="height: 330px">Concept1 Concept2 0.05</textarea>
+                            <label for="profile">Preference Profile</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="approach" class="form-label">Approach:</label>
+                            <select class="form-select" id="approach" name="approach" required>
+                                <option value="dynamic" th:selected="${optionVal == 'dynamic'}">Dynamic Programming
+                                </option>
+                                <option value="topdown" th:selected="${optionVal == 'topdown'}">Top-Down</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary pt-3 pb-3 form-control" type="submit">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div id="resultSection" class="container mt-5 py-3 px-3 mb-3">
+    <form action="/simResult" method="POST" name="Measurement">
+        <h3>Similarity Function</h3>
+        <input type="hidden" name="conceptnameInput">
+        <div class="input-group mb-3">
+            <input type="text" name="concept1" class="form-control conceptname" placeholder="Concept 1" required>
+            <input type="text" name="concept2" class="form-control conceptname" placeholder="Concept 2" required>
+        </div>
+        <button type="button" id="addConcept" class="btn btn-secondary">Add more concept name</button>
+        <button type="button" id="measureButton" class="btn btn-outline-secondary">Measure</button>
+
+        <!-- Output -->
+        <div class="form-floating mt-3" id="result-con">
+                <textarea class="form-control" placeholder="" id="floatingTextarea2"
+                          style="height: 350px;" th:text="${simResult}" disabled></textarea>
+            <label for="floatingTextarea2">Output :</label>
+            <button type="button" id="downloadButton" class="btn btn-secondary" onclick="downloadOutput()">Download</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="/css/script.js"></script>
+<script th:if="${redirectToAnchor}">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+</body>
+
+</html>
