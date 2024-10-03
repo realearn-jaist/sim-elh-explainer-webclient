@@ -152,7 +152,7 @@ public class WebController {
                         OWLDynamicProgrammingSimService.readInputOWLOntology(inputFile, conceptnameInput);
 
                         simResult = OWLDynamicProgrammingSimService.computeDynamicProgramming();
-                    } else { // topdown computation
+                    } else if (optionVal.equals("topdown")) { // topdown computation
                         OWLTopDownProgrammingSimService.readInputOWLOntology(inputFile, conceptnameInput);
 
                         simResult = OWLTopDownProgrammingSimService.computeTopDownProgramming();

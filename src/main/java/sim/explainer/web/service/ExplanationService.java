@@ -28,6 +28,7 @@ public class ExplanationService {
 
         List<String[]> priList = new ArrayList<>();
         List<List<String>> exiList = new ArrayList<>();
+        String[] priArr = new String[2];
 
         // runchana:2023-31-07 iterate through each value in backTraceTable
         Deque<Map.Entry<Map<Integer, String[]>, Map<String, Map<Tree<Set<String>>, BigDecimal>>>> lastTwoEntries = new LinkedList<>();
@@ -63,10 +64,10 @@ public class ExplanationService {
 
             // runchana:2023-31-07 retrieve primitives and degree along with its concept name
             for (Map.Entry<String, Map<Tree<Set<String>>, BigDecimal>> entry : valueMap.entrySet()) {
-                String[] priArr = new String[1];
+                String priEach = "";
                 List<String> exiEach = new ArrayList<>();
 
-                String key = entry.getKey(); // concept name
+                String key = entry.getKey();
                 String exi;
 
                 for (Map.Entry<Tree<Set<String>>, BigDecimal> child : entry.getValue().entrySet()) {
@@ -84,9 +85,9 @@ public class ExplanationService {
                     degree = child.getValue();
 
                     // runchana:2023-31-07 retrieve a primitive concept
-                    priArr[0] = child.getKey().getNodes().get(0).toString();
+                    priEach = child.getKey().getNodes().get(0).toString();
 
-                    removeUnwantedChar(priArr);
+                    priArr = removeUnwantedChar(priEach);
 
                     priList.add(priArr);
                     exiList.add(exiEach);
@@ -100,7 +101,6 @@ public class ExplanationService {
 
                 res.append("\n");
             }
-
         }
 
         // runchana:2023-31-07 find matched concepts and existential for explanation details
@@ -129,12 +129,14 @@ public class ExplanationService {
      * runchana:2023-31-07
      * Remove unwanted character (') that is usually appear in primitive concepts
      * to make an explanation looks more natural in human terms.
-     * @param wordsArray array of primitive concepts
+     * @param words (primitive concepts)
      */
-    private void removeUnwantedChar(String[] wordsArray) {
-        for (int i = 0; i < wordsArray.length; i++) {
-            wordsArray[i] = wordsArray[i].replaceAll("'", "");
+    private String[] removeUnwantedChar(String words) {
+        String[] wordsArr = words.split(" ");
+        for (int i = 0; i < wordsArr.length; i++) {
+            wordsArr[i] = wordsArr[i].replaceAll("'", "");
         }
+        return  wordsArr;
     }
 
     /**
@@ -155,17 +157,9 @@ public class ExplanationService {
             int c2_length = concept2.length;
 
             for (int i = 0; i < c1_length; i++) {
-                String[] conName1 = concept1[i].split("\\s+");
-
                 for (int j = 0; j < c2_length; j++) {
-                    String[] conName2 = concept2[i].split("\\s+");
-
-                    for (String cn1 : conName1) {
-                        for (String cn2 : conName2) {
-                            if (cn1.equals(cn2)) {
-                                matchingWords.add(cn1);
-                            }
-                        }
+                    if (concept1[i].equals(concept2[j])) {
+                        matchingWords.add(concept1[i]);
                     }
                 }
             }

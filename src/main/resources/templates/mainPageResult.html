@@ -24,7 +24,7 @@
         </form>
         <!-- runchana:2023-10-12 Instruction  -->
         <div th:if="${conceptList == null}" class="text-center">
-            <p>Upload an .owl file or .krss file that you would like to compute a similarity degree.</p>
+            <p>Upload an .owl file or .krss file (coincided with the description logic ELH or the OWL EL profile) that you would like to compute a similarity degree.</p>
         </div>
         <!-- runchana:2023-10-12 Display list of concept names from an uploaded file and allow users to input preference profile manually with similarity measurement option -->
         <div th:if="${conceptList != null and not #strings.isEmpty(conceptList.toString())}" class="col-md-9">
@@ -52,7 +52,7 @@
                         <div class="form-floating mb-3">
                                 <textarea class="form-control" id="profile" name="profile"
                                           title="Preference profile to manually specify a value of each pair of concept names"
-                                          style="height: 330px">Concept1 Concept2 0.05</textarea>
+                                          style="height: 330px"></textarea>
                             <label for="profile">Preference Profile</label>
                         </div>
                         <div class="mb-3">
